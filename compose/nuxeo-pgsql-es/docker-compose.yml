@@ -1,0 +1,49 @@
+version: '2'
+services:
+  postgres-datavolume:
+    image: nuxeo/postgres
+    entrypoint: chown -R postgres:postgres /var/lib/postgresql/data
+    volumes:
+      - "../../../${DEMO_NAME}/pgsql_data:/var/lib/postgresql/data"
+
+  postgres:
+    image: nuxeo/postgres
+    environment:
+      - DEMO_NAME
+      - POSTGRES_USER=nuxeo
+      - POSTGRES_PASSWORD=nuxeo
+
+    volumes_from:
+      - postgres-datavolume
+
+
+  nuxeo-datavolume:
+    build: ./build-nuxeo-ffmpeg
+    image: nuxeo:latestffmpeg
+    entrypoint: /bin/true
+    volumes:
+      - ../../../${DEMO_NAME}/nuxeo_store:/opt/nuxeo/server/packages/store/
+      - ../../../${DEMO_NAME}/nuxeo_data:/var/lib/nuxeo/data
+      - ../../../${DEMO_NAME}/nuxeo_plugins:/opt/nuxeo/server/nxserver/plugins
+
+  nuxeo:
+    build: ./build-nuxeo-ffmpeg
+    image: nuxeo:latestffmpeg
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    environment:
+      - TZ=WET
+      - NUXEO_DEV_MODE=true
+      - NUXEO_PACKAGES=${packages}
+      - NUXEO_CLID=${clid}
+      - DEMO_NAME
+      - NUXEO_DB_HOST=postgres
+      - NUXEO_DB_TYPE=postgresql
+      - NUXEO_CUSTOM_PARAM=${custom_param}
+
+    volumes_from:
+      - nuxeo-datavolume
+
+    links:
+      - postgres:postgres
