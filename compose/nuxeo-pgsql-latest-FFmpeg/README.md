@@ -7,7 +7,7 @@ You can override the variable default values with a simple start.sh script that 
 ```
 #/bin/sh
 export DEMO_NAME="demo"
-export packages="nuxeo-jsf-ui nuxeo-web-ui nuxeo-drive nuxeo-vision nuxeo-diff"
+export packages="nuxeo-jsf-ui nuxeo-web-ui nuxeo-drive"
 
 docker-compose rm -f
 docker-compose up -d
