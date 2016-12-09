@@ -59,7 +59,7 @@ ENV NUXEO_VERSION 8.10
 ENV NUXEO_HOME /opt/nuxeo/server
 
 # Add distribution
-RUN curl -fsSL "http://community.nuxeo.com/static/releases/${NUXEO_VERSION}/nuxeo-server-${NUXEO_VERSION}-tomcat.zip" -o /tmp/nuxeo-distribution-tomcat.zip \
+RUN curl -fsSL "http://community.nuxeo.com/static/releases/nuxeo-${NUXEO_VERSION}/nuxeo-server-${NUXEO_VERSION}-tomcat.zip" -o /tmp/nuxeo-distribution-tomcat.zip \
     && mkdir -p /tmp/nuxeo-distribution $(dirname $NUXEO_HOME) \
     && unzip -q -d /tmp/nuxeo-distribution /tmp/nuxeo-distribution-tomcat.zip \
     && DISTDIR=$(/bin/ls /tmp/nuxeo-distribution | head -n 1) \
