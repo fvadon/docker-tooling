@@ -30,8 +30,8 @@ services:
     build: ./build-nuxeo-ffmpeg
     image: nuxeo:latestffmpeg
     ports:
-      - "8080:8080"
-      - "8787:8787"
+      - "${host_port}:8080"
+      - "${host_debug_port}:8787"
     environment:
       - TZ=WET
       - NUXEO_DEV_MODE=true
