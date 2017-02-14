@@ -1,5 +1,5 @@
 # vim:set ft=dockerfile:
-FROM       java:8-jre
+FROM       openjdk:8-jre
 MAINTAINER Nuxeo <packagers@nuxeo.com>
 
 # Create Nuxeo user
@@ -35,12 +35,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Add ffmpeg-support
 RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y --no-install-recommends libfaac-dev git
+RUN apt-get update && apt-get install -y --no-install-recommends git
 
 WORKDIR /tmp
 # Build ffmpeg
 ENV BUILD_YASM true
-ENV LIBFAAC true
+ENV LIBFAAC false
 RUN git clone https://github.com/nuxeo/ffmpeg-nuxeo.git
 WORKDIR ffmpeg-nuxeo
 RUN ./prepare-packages.sh \
@@ -51,6 +51,14 @@ RUN ./prepare-packages.sh \
  && cd /tmp \
  && rm -Rf ffmpeg-nuxeo \
  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+#Build CC-extractor
+RUN wget http://sourceforge.net/projects/ccextractor/files/ccextractor/0.79/ccextractor.src.0.79.zip \
+ && unzip ccextractor.src.0.79.zip
+WORKDIR ccextractor.0.79/linux
+RUN ./build \
+ && mv ccextractor /usr/bin/ccextractor
 
 # Mitigate ImageTragick vulnerability
 ADD imagemagick-policy.xml /etc/ImageMagick/policy.xml

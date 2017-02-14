@@ -123,7 +123,8 @@ EOF
 
   # Install packages if exist
   if [ -n "$NUXEO_PACKAGES" ]; then
-    gosu $NUXEO_USER nuxeoctl mp-install $NUXEO_PACKAGES --relax=true --accept=true
+    gosu $NUXEO_USER nuxeoctl mp-add $NUXEO_PACKAGES --relax=false --accept=true
+    gosu $NUXEO_USER nuxeoctl mp-install $NUXEO_PACKAGES --relax=false --accept=true
   fi
   for f in /docker-entrypoint-initnuxeo.d/*; do
     case "$f" in
