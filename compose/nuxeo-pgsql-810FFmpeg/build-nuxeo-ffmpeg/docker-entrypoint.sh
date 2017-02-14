@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 set -e
 
 NUXEO_CONF=$NUXEO_HOME/bin/nuxeo.conf
@@ -13,7 +13,7 @@ if [ "$1" = 'nuxeoctl' ]; then
         echo "You have to setup a NUXEO_DB_HOST if not using default DB type"
         exit 1
       fi
-      
+
       NUXEO_DB_HOST=${NUXEO_DB_HOST}
       NUXEO_DB_NAME=${NUXEO_DB_NAME:-nuxeo}
       NUXEO_DB_USER=${NUXEO_DB_USER:-nuxeo}
@@ -30,7 +30,7 @@ if [ "$1" = 'nuxeoctl' ]; then
     if [ -n "$NUXEO_TEMPLATES" ]; then
       perl -p -i -e "s/^#?(nuxeo.templates=.*$)/\1,${NUXEO_TEMPLATES}/g" $NUXEO_CONF
     fi
- 
+
     # nuxeo.url
     if [ -n "$NUXEO_URL" ]; then
       echo "nuxeo.url=$NUXEO_URL" >> $NUXEO_CONF
@@ -66,7 +66,7 @@ if [ "$1" = 'nuxeoctl' ]; then
       printf "%b\n" "$NUXEO_CUSTOM_PARAM" >> $NUXEO_CONF
     fi
 
-    
+
     mkdir -p ${NUXEO_DATA:=/var/lib/nuxeo/data}
     mkdir -p ${NUXEO_LOG:=/var/log/nuxeo}
     mkdir -p /var/run/nuxeo
@@ -123,7 +123,8 @@ EOF
 
   # Install packages if exist
   if [ -n "$NUXEO_PACKAGES" ]; then
-    gosu $NUXEO_USER nuxeoctl mp-install $NUXEO_PACKAGES --relax=false --accept=true
+    gosu $NUXEO_USER nuxeoctl mp-add $NUXEO_PACKAGES --relax=true --accept=true
+    gosu $NUXEO_USER nuxeoctl mp-install $NUXEO_PACKAGES --relax=true --accept=true
   fi
   for f in /docker-entrypoint-initnuxeo.d/*; do
     case "$f" in
