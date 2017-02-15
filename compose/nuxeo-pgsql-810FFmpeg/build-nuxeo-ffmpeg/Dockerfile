@@ -52,6 +52,11 @@ RUN ./prepare-packages.sh \
  && rm -Rf ffmpeg-nuxeo \
  && rm -rf /var/lib/apt/lists/*
 
+
+#Install graphviz for studio viz nuxeo package
+RUN apt-get update && apt-get install -y graphviz && rm -rf /var/lib/apt/lists/*
+
+
 WORKDIR /tmp
 #Build CC-extractor
 RUN wget http://sourceforge.net/projects/ccextractor/files/ccextractor/0.79/ccextractor.src.0.79.zip \

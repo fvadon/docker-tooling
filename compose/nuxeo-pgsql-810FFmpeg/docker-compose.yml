@@ -19,7 +19,7 @@ services:
 
   nuxeo-datavolume:
     build: ./build-nuxeo-ffmpeg
-    image: nuxeoffmpegrelax:810
+    image: nuxeoffmpegrelaxviz:810
     entrypoint: /bin/true
     volumes:
       - ../../../${DEMO_NAME}/nuxeo_store:/opt/nuxeo/server/packages/store/
@@ -28,7 +28,7 @@ services:
 
   nuxeo:
     build: ./build-nuxeo-ffmpeg
-    image: nuxeoffmpegrelax:810
+    image: nuxeoffmpegrelaxviz:810
     ports:
       - "${host_port}:8080"
       - "${host_debug_port}:8787"
