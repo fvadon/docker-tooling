@@ -34,13 +34,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Add ffmpeg-support
-RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/sources.list
-RUN apt-get update && apt-get install -y --no-install-recommends git
+RUN echo "deb http://deb.debian.org/debian jessie non-free" >> /etc/apt/sources.list
+RUN apt-get update && apt-get install -y --no-install-recommends git libfaac-dev
 
 WORKDIR /tmp
 # Build ffmpeg
 ENV BUILD_YASM true
-ENV LIBFAAC false
+ENV LIBFAAC true
 RUN git clone https://github.com/nuxeo/ffmpeg-nuxeo.git
 WORKDIR ffmpeg-nuxeo
 RUN ./prepare-packages.sh \
