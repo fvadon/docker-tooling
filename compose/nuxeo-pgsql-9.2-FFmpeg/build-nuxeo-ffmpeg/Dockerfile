@@ -1,4 +1,6 @@
-FROM nuxeo:latest
+FROM nuxeo:9.2
+
+USER root
 
 RUN echo "deb http://httpredir.debian.org/debian jessie non-free" >> /etc/apt/sources.list
 RUN apt-get update && apt-get install -y --no-install-recommends libfaac-dev git
@@ -17,3 +19,5 @@ RUN ./prepare-packages.sh \
  && cd /tmp \
  && rm -Rf ffmpeg-nuxeo \
  && rm -rf /var/lib/apt/lists/*
+
+USER 1000
