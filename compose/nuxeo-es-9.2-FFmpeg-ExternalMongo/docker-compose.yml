@@ -1,0 +1,43 @@
+version: '2'
+services:
+  elasticsearch1:
+    volumes:
+      - es_data1:/usr/share/elasticsearch/data
+  #    - es_config:/usr/share/elasticsearch/config
+    image: elasticsearch:2.4.1
+    ports:
+      # Open port on host to allow explore es
+      #- "9200:9200"
+  nuxeo:
+    environment:
+      TZ: WET
+      NUXEO_DEV_MODE: "false"
+      NUXEO_PACKAGES: ${packages}
+      NUXEO_CLID: ${clid}
+      NUXEO_TEMPLATES: default,mongodb
+      NUXEO_ES_HOSTS: elasticsearch1:9300
+      NUXEO_ES_REPLICAS: 0
+      NUXEO_CUSTOM_PARAM: |
+        {custom_param}
+        nuxeo.mongodb.server=10.213.3.130:27017
+        org.nuxeo.runtime.reload_strategy=unstash
+        audit.elasticsearch.enabled=true
+        elasticsearch.httpEnabled=true
+        elasticsearch.clusterName=elasticsearch
+        elasticsearch.indexName=nuxeo
+    build: ./build-nuxeo-ffmpeg
+    image: nuxeo:9.2ffmpeg
+    ports:
+      - "${host_port}:8080"
+      - "${host_debug_port}:8787"
+    volumes:
+      - nuxeo_store:/opt/nuxeo/server/packages/store/
+      - nuxeo_data:/var/lib/nuxeo/data
+    links:
+      - elasticsearch1:elasticsearch1
+    depends_on:
+      - elasticsearch1
+volumes:
+  nuxeo_store:
+  nuxeo_data:
+  es_data1:
